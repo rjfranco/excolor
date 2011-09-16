@@ -4,6 +4,7 @@ jQuery.fn.excolor = (C) ->
     hue_bar: 0
     hue_slider: 0
     sb_slider: 0
+    resource_path: null
     color_box: true
     demo_mode: false
     show_color_on_border: false
@@ -289,13 +290,13 @@ jQuery.fn.excolor = (C) ->
       jQuery(sbbox).css "background-color", "#" + hsb2rgb_hex(-1 * (hue - 119) * 3, 100, 100, "hex")
       jQuery(colsample).css("background-color", "#" + hsb2rgb_hex(-1 * (hue - 119) * 3, saturation, brightness, "hex")).css "background-image", "none"
       jQuery(switcher).css "background", "url(" + root_path + "transp0.gif) 0 0 no-repeat"
-    run_modcoder_colorpicker = ->
+    run_excolor_colorpicker = ->
       b = -1 * C.hue_bar * 20
-      c = "<div id=\"modcoder_sample_wrapper\" style=\"width:62px;height:30px;float:left;background:none;border:1px solid " + C.border_color + ";margin:0;padding:0;" + u + "\"><div id=\"modcoder_sample\" style=\"width:60px;height:28px;border:1px solid white;float:left;padding:0;margin:0;" + u + "\"></div></div>"
+      c = "<div id=\"excolor_sample_wrapper\" style=\"width:62px;height:30px;float:left;background:none;border:1px solid " + C.border_color + ";margin:0;padding:0;" + u + "\"><div id=\"excolor_sample\" style=\"width:60px;height:28px;border:1px solid white;float:left;padding:0;margin:0;" + u + "\"></div></div>"
       init_color()
-      jQuery("body").append "<div style=\"display:none;width:265px;height:162px;position:absolute;overflow:hidden;padding:0;margin:0;" + radwrap + shadow + "\" id=\"modcoder_colorpicker\"><div id=\"modcoder_colorpicker_wrapper\" style=\"height:140px;width:244px;margin:0;padding:10px 9px 10px 10px;float:left;overflow:hidden;background-color:" + C.background_color + ";border:1px solid " + C.border_color + ";" + backlight + radwrap + "\"><div id=\"modcoder_grad_wrap\" style=\"width:140px;height:140px;float:left;background:none;padding:0;margin:0;border:none;\"><div id=\"modcoder_grad\" style=\"width:132px;height:132px;border:4px solid " + C.sb_border_color + ";padding:0;margin:0;" + u + "\"><div style=\"width:130px;height:130px;float:left;background-image:url(" + root_path + "bg.png);background-position:0 0;background-repeat:no-repeat;border:1px solid white;padding:0;margin:0;\"></div></div></div><div id=\"modcoder_hue_wrap\" style=\"width:20px;height:130px;float:left;padding:15px 8px 0px 10px;margin:0;border:none;\"><div id=\"modcoder_hue\" style=\"width:20px;height:130px;float:left;background:url(" + root_path + "hue.png) " + b + "px 0 no-repeat;margin:0;padding:0;border:none;\"></div></div><div id=\"modcoder_data\" style=\"float:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;width:66px;height:140px;margin:0;padding:0;border:none;\">" + c + "<div class=\"modcoder_dataitem\" style=\"float:left;padding:6px 0 0 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">R</b><input style=\"line-height:13px;padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"modcoder_r\" class=\"modcoder_input modcoder_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"modcoder_dataitem\" style=\"float:left;padding:3px 0 0 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">G</b><input style=\"line-height:13px;padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"modcoder_g\" class=\"modcoder_input modcoder_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"modcoder_dataitem\" style=\"float:left;padding:3px 0 0 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">B</b><input style=\"padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"modcoder_b\" class=\"modcoder_input modcoder_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"modcoder_dataitem\" style=\"float:left;padding:6px 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">#</b><input style=\"padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"modcoder_hex\" class=\"modcoder_input\" type=\"text\" size=\"6\" maxlength=\"6\" /></div><div style=\"width:66px;height:15px;padding:0;margin:0;border:none;float:left;\"><div id=\"modcoder_ok\" style=\"margin:0;padding:0;width:47px;height:15px;float:left;cursor:pointer;background-image:url(" + root_path + "ok.png);background-position: 0 0;background-repeat:no-repeat;\"></div><div id=\"modcoder_close\" style=\"margin:0;padding:0;width:15px;height:15px;float:right;cursor:pointer;background-image:url(" + root_path + "ok.png);background-position: -47px 0;background-repeat:no-repeat;\"></div></div></div></div></div><div style=\"display:none;width:11px;height:11px;position:absolute;background: url(" + root_path + "sel.gif) " + (-1 * C.sb_slider * 11) + "px 0 no-repeat;margin:0;padding:0;border:none;\" id=\"modcoder_picker\"></div><div style=\"display:none;width:20px;height:11px;position:absolute;background: url(" + root_path + "slider.gif) " + (-1 * C.hue_slider * 20) + "px 0 no-repeat;margin:0;padding:0;border:none;cursor:n-resize;\" id=\"modcoder_slider\"></div><div id=\"modcoder_switcher\" style=\"border:1px solid " + C.border_color + ";display:none;padding:0;margin:0;font-size:1px;line-height:1px;width:20px;height:12px;background:url(" + root_path + "transp0.gif) 0 0 no-repeat;position:absolute;cursor:pointer;" + rad3px + "\"></div>"
+      jQuery("body").append "<div style=\"display:none;width:265px;height:162px;position:absolute;overflow:hidden;padding:0;margin:0;" + radwrap + shadow + "\" id=\"excolor_colorpicker\"><div id=\"excolor_colorpicker_wrapper\" style=\"height:140px;width:244px;margin:0;padding:10px 9px 10px 10px;float:left;overflow:hidden;background-color:" + C.background_color + ";border:1px solid " + C.border_color + ";" + backlight + radwrap + "\"><div id=\"excolor_grad_wrap\" style=\"width:140px;height:140px;float:left;background:none;padding:0;margin:0;border:none;\"><div id=\"excolor_grad\" style=\"width:132px;height:132px;border:4px solid " + C.sb_border_color + ";padding:0;margin:0;" + u + "\"><div style=\"width:130px;height:130px;float:left;background-image:url(" + root_path + "bg.png);background-position:0 0;background-repeat:no-repeat;border:1px solid white;padding:0;margin:0;\"></div></div></div><div id=\"excolor_hue_wrap\" style=\"width:20px;height:130px;float:left;padding:15px 8px 0px 10px;margin:0;border:none;\"><div id=\"excolor_hue\" style=\"width:20px;height:130px;float:left;background:url(" + root_path + "hue.png) " + b + "px 0 no-repeat;margin:0;padding:0;border:none;\"></div></div><div id=\"excolor_data\" style=\"float:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;width:66px;height:140px;margin:0;padding:0;border:none;\">" + c + "<div class=\"excolor_dataitem\" style=\"float:left;padding:6px 0 0 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">R</b><input style=\"line-height:13px;padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"excolor_r\" class=\"excolor_input excolor_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"excolor_dataitem\" style=\"float:left;padding:3px 0 0 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">G</b><input style=\"line-height:13px;padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"excolor_g\" class=\"excolor_input excolor_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"excolor_dataitem\" style=\"float:left;padding:3px 0 0 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">B</b><input style=\"padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"excolor_b\" class=\"excolor_input excolor_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"excolor_dataitem\" style=\"float:left;padding:6px 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">#</b><input style=\"padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"excolor_hex\" class=\"excolor_input\" type=\"text\" size=\"6\" maxlength=\"6\" /></div><div style=\"width:66px;height:15px;padding:0;margin:0;border:none;float:left;\"><div id=\"excolor_ok\" style=\"margin:0;padding:0;width:47px;height:15px;float:left;cursor:pointer;background-image:url(" + root_path + "ok.png);background-position: 0 0;background-repeat:no-repeat;\"></div><div id=\"excolor_close\" style=\"margin:0;padding:0;width:15px;height:15px;float:right;cursor:pointer;background-image:url(" + root_path + "ok.png);background-position: -47px 0;background-repeat:no-repeat;\"></div></div></div></div></div><div style=\"display:none;width:11px;height:11px;position:absolute;background: url(" + root_path + "sel.gif) " + (-1 * C.sb_slider * 11) + "px 0 no-repeat;margin:0;padding:0;border:none;\" id=\"excolor_picker\"></div><div style=\"display:none;width:20px;height:11px;position:absolute;background: url(" + root_path + "slider.gif) " + (-1 * C.hue_slider * 20) + "px 0 no-repeat;margin:0;padding:0;border:none;cursor:n-resize;\" id=\"excolor_slider\"></div><div id=\"excolor_switcher\" style=\"border:1px solid " + C.border_color + ";display:none;padding:0;margin:0;font-size:1px;line-height:1px;width:20px;height:12px;background:url(" + root_path + "transp0.gif) 0 0 no-repeat;position:absolute;cursor:pointer;" + rad3px + "\"></div>"
       aitem_pos = jQuery(aitem).offset()
-      wrapper = jQuery("body > div#modcoder_colorpicker").css("left", aitem_pos.left + "px").css("top", (aitem_pos.top + jQuery(aitem).outerHeight()) + "px").mouseenter(->
+      wrapper = jQuery("body > div#excolor_colorpicker").css("left", aitem_pos.left + "px").css("top", (aitem_pos.top + jQuery(aitem).outerHeight()) + "px").mouseenter(->
         clearTimeout click_to
         click_to = setTimeout(->
           click_flag = true
@@ -306,10 +307,10 @@ jQuery.fn.excolor = (C) ->
           click_flag = false
         , 50)
       )
-      inp_hex = jQuery(wrapper).find("input#modcoder_hex")
-      switcher = jQuery("body > div#modcoder_switcher")
-      slider = jQuery("body > div#modcoder_slider")
-      sb_sel = jQuery("body > div#modcoder_picker")
+      inp_hex = jQuery(wrapper).find("input#excolor_hex")
+      switcher = jQuery("body > div#excolor_switcher")
+      slider = jQuery("body > div#excolor_slider")
+      sb_sel = jQuery("body > div#excolor_picker")
       switch C.effect
         when "zoom"
           jQuery(wrapper).css("width", "0px").css("height", "0px").show().animate 
@@ -317,28 +318,28 @@ jQuery.fn.excolor = (C) ->
             height: "162px"
           , C.anim_speed, ->
             jQuery(this).show()
-            jQuery("body > div#modcoder_slider, body > div#modcoder_picker").show()
+            jQuery("body > div#excolor_slider, body > div#excolor_picker").show()
             jQuery(switcher).show()
         when "slide"
           jQuery(wrapper).slideDown C.anim_speed, ->
             jQuery(this).show()
-            jQuery("body > div#modcoder_slider, body > div#modcoder_picker").show()
+            jQuery("body > div#excolor_slider, body > div#excolor_picker").show()
             jQuery(switcher).show()
         when "fade"
-          jQuery("body > div#modcoder_colorpicker, body > div#modcoder_slider, body > div#modcoder_picker, body > div#modcoder_switcher").fadeTo 1, 0, ->
+          jQuery("body > div#excolor_colorpicker, body > div#excolor_slider, body > div#excolor_picker, body > div#excolor_switcher").fadeTo 1, 0, ->
             jQuery(this).show().fadeTo C.anim_speed, 1
         else
           jQuery(wrapper).show()
           jQuery(switcher).show()
-          jQuery("body > div#modcoder_slider, body > div#modcoder_picker").show()
-      huebox = jQuery(wrapper).find("div#modcoder_hue")
-      sbbox = jQuery(wrapper).find("div#modcoder_grad div")
-      colsample = jQuery(wrapper).find("#modcoder_sample")
-      inp_r = jQuery(wrapper).find("input#modcoder_r")
-      inp_g = jQuery(wrapper).find("input#modcoder_g")
-      inp_b = jQuery(wrapper).find("input#modcoder_b")
-      ok_but = jQuery(wrapper).find("#modcoder_ok")
-      close_but = jQuery(wrapper).find("#modcoder_close")
+          jQuery("body > div#excolor_slider, body > div#excolor_picker").show()
+      huebox = jQuery(wrapper).find("div#excolor_hue")
+      sbbox = jQuery(wrapper).find("div#excolor_grad div")
+      colsample = jQuery(wrapper).find("#excolor_sample")
+      inp_r = jQuery(wrapper).find("input#excolor_r")
+      inp_g = jQuery(wrapper).find("input#excolor_g")
+      inp_b = jQuery(wrapper).find("input#excolor_b")
+      ok_but = jQuery(wrapper).find("#excolor_ok")
+      close_but = jQuery(wrapper).find("#excolor_close")
       pos_wrap = jQuery(wrapper).offset()
       pos_sbbox = jQuery(sbbox).offset()
       pos_huebox = jQuery(huebox).offset()
@@ -435,13 +436,13 @@ jQuery.fn.excolor = (C) ->
         correct_y = e.pageY - pos_sel.top
         e.preventDefault()
       
-      jQuery(wrapper).find("input.modcoder_input").keypress((a) ->
-        if jQuery(this).hasClass("modcoder_rgb")
+      jQuery(wrapper).find("input.excolor_input").keypress((a) ->
+        if jQuery(this).hasClass("excolor_rgb")
           a.preventDefault()  if not ((String.fromCharCode(a.which) * 1) of w) and not (a.which of z)
         else
           a.preventDefault()  if not (String.fromCharCode(a.which) of y) and not (a.which of z)
       ).change(->
-        if jQuery(this).hasClass("modcoder_rgb")
+        if jQuery(this).hasClass("excolor_rgb")
           jQuery(this).val "0"  if jQuery(this).val() == ""
           jQuery(this).val "0"  if isNaN(jQuery(this).val() * 1)
           jQuery(this).val "255"  if jQuery(this).val() * 1 > 255
@@ -450,7 +451,7 @@ jQuery.fn.excolor = (C) ->
         else
           hex_valid_and_draw()
       ).keyup ->
-        if jQuery(this).hasClass("modcoder_rgb")
+        if jQuery(this).hasClass("excolor_rgb")
           jQuery(this).val "0"  if jQuery(this).val() == ""
           jQuery(this).val "0"  if isNaN(jQuery(this).val() * 1)
           jQuery(this).val "255"  if jQuery(this).val() * 1 > 255
@@ -540,7 +541,7 @@ jQuery.fn.excolor = (C) ->
     while i < moved_slider.length
       j = "" + jQuery(moved_slider[i]).attr("src")
       j = j.toLowerCase()
-      j = j.split("jquery.modcoder.excolor.js")
+      j = j.split("jquery.excolor.js")
       root_path = j[0]  if j.length == 2
       i++
     k = new Image()
@@ -690,9 +691,9 @@ jQuery.fn.excolor = (C) ->
     
     jQuery(aitem).click(->
       unless opened
-        jQuery("body > div#modcoder_slider, body > div#modcoder_picker, body > div#modcoder_colorpicker").stop().remove()
+        jQuery("body > div#excolor_slider, body > div#excolor_picker, body > div#excolor_colorpicker").stop().remove()
         setTimeout (->
-          run_modcoder_colorpicker()
+          run_excolor_colorpicker()
         ), 50
     ).keyup ->
       if opened
