@@ -1,0 +1,40 @@
+html, body {
+  background: #aaa;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+div#container {
+  background: #e1e1e1;
+  color: #333;
+  text-shadow: #fff 1px 1px 0;
+  width: 50em;
+  margin: 2em auto;
+  padding: 1.5em;
+  @include box-shadow(1em);
+  @include border-radius(3px);
+  h1 {
+    font-family: 'Lobster', cursive;
+    font-size: 3em;
+    border-bottom: 1px solid #666;
+    margin: 0 0 .3em;
+  }
+  h3 {
+    font-size: 1.2em;
+    letter-spacing: .03em;
+    color: #444;
+  }
+  p {
+    margin: 1em 0;
+  }
+  code {
+    margin: 1em 0;
+    background: #34352d;
+    padding: .6em;
+    font-family: 'Anonymous Pro', 'Lucida Console', monospace;
+    display: block;
+    line-height: 1.2;
+    font-size: .8em;
+    text-shadow: none;
+    @include border-radius(2px);
+  }
+}

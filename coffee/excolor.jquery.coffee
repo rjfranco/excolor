@@ -1,4 +1,5 @@
 jQuery.fn.excolor = (C) ->
+
   C = jQuery.extend(
     hue_bar: 0
     hue_slider: 0
@@ -8,13 +9,13 @@ jQuery.fn.excolor = (C) ->
     show_color_on_border: false
     border_color: "black"
     sb_border_color: "black"
-    anim_speed: "slow"
+    anim_speed: "fast"
     round_corners: true
     shadow: true
     shadow_size: 4
     shadow_color: "#8a8a8a"
     background_color: "silver"
-    backlight: true
+    backlight: false
     input_text_color: "black"
     input_background_color: "white"
     label_color: "black"
@@ -22,7 +23,9 @@ jQuery.fn.excolor = (C) ->
     callback_on_ok: ->
       a = ""
   , C)
+
   @each ->
+
     init_color = ->
       parsex = jQuery.trim(jQuery(aitem).val() + "")
       inputhex = ""
@@ -31,10 +34,11 @@ jQuery.fn.excolor = (C) ->
         jQuery(wrapper).find("input").val ""
       else
         i = 0
-        
+
         while i < parsex.length
           inputhex += parsex.charAt(i) + ""  if inputhex.length < 6  if parsex.charAt(i) != "#" and (parsex.charAt(i) + "") of y
           i++
+
         switch inputhex.length
           when 0
             inputhex = "000000" + inputhex
@@ -48,6 +52,7 @@ jQuery.fn.excolor = (C) ->
             inputhex = "00" + inputhex
           when 5
             inputhex = "0" + inputhex
+
         parsex = hex2rgb(inputhex)
         parsex = rgb2hsv(parsex["r"], parsex["g"], parsex["b"])
         hue = 120 - Math.round(parsex["h"] * 1 / 3)
@@ -576,7 +581,7 @@ jQuery.fn.excolor = (C) ->
     if C.round_corners
       u = "-khtml-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;"
       rad3px = "-khtml-border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;"
-      radwrap = "-khtml-border-radius: 0 7px 7px 7px;-moz-border-radius: 0 7px 7px 7px;-webkit-border-radius: 0 7px 7px 7px;border-radius: 0 7px 7px 7px;"
+      radwrap = "-khtml-border-radius: 0 2px 2px 2px;-moz-border-radius: 0 2px 2px 2px;-webkit-border-radius: 0 2px 2px 2px;border-radius: 0 2px 2px 2px;"
     shadow = "box-shadow:0 " + C.shadow_size + "px " + (C.shadow_size * 2) + "px 0 " + C.shadow_color + ";-webkit-box-shadow:0 " + C.shadow_size + "px " + (C.shadow_size * 2) + "px 0 " + C.shadow_color + ";-moz-box-shadow:0 " + C.shadow_size + "px " + (C.shadow_size * 2) + "px 0 " + C.shadow_color + ";"  if C.shadow
     backlight = "background-position:0 0;background-repeat:no-repeat;background-image:url(" + root_path + "shbg.png);"  if C.backlight
     w = new Array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
