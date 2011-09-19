@@ -1,11 +1,6 @@
 /*!
  * ExColor for jQuery
- * http://excolor.org/
- *
- * Copyright 2011, excolor
- * Dual licensed under the MIT or GPL Version 2 licenses.
- *
- * Date: Thu May 12 21:36:33 2011
+ * http://excolor.ramiro.mx/
  */
 jQuery.fn.excolor = function (C) {
   var C = jQuery.extend({
