@@ -9,7 +9,7 @@ To get started using it, make sure you've got jquery, the excolor plugin, and th
 
 ~~~
 $('input.myinput').excolor({
-  root\_path: 'img/'
+  root_path: 'img/'
 });
 ~~~
 
