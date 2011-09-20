@@ -38,4 +38,9 @@ div#container {
     text-shadow: none;
     @include border-radius(2px);
   }
+  input.color-input {
+    background: #fff;
+    color: #333;
+    border: 1px solid #aaa;
+  }
 }

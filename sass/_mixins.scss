@@ -4,8 +4,8 @@
   border-radius: $radius;
 }
 
-@mixin box-shadow($distance) {
-  -moz-box-shadow: rgba(0,0,0,.25) 0 0 $distance 0;
-  -webkit-box-shadow: rgba(0,0,0,.25) 0 0 $distance 0;
-  box-shadow: rgba(0,0,0,.25) 0 0 $distance 0;
+@mixin box-shadow($distance, $opacity: .25) {
+  -moz-box-shadow: rgba(0,0,0,$opacity) 0 0 $distance 0;
+  -webkit-box-shadow: rgba(0,0,0,$opacity) 0 0 $distance 0;
+  box-shadow: rgba(0,0,0,$opacity) 0 0 $distance 0;
 }
