@@ -23,6 +23,7 @@ jQuery.fn.excolor = function (C) {
     input_background_color: 'white',
     label_color: 'black',
     effect: 'none',
+    root_path: false,
     callback_on_ok: function () {
       var a = ''
     }
@@ -61,18 +62,25 @@ jQuery.fn.excolor = function (C) {
       userok = false,
       parsex = '',
       inputhex = '',
-      root_path = '',
+      rgb_input = /\d+\,\d+\,\d+/i,
+      rgb_output = false,
       looper = 0,
       switcher = 0;
     moved_slider = jQuery('script');
-    for (var i = 0; i < moved_slider.length; i++) {
-      j = '' + jQuery(moved_slider[i]).attr('src');
-      j = j.toLowerCase();
-      j = j.split('jquery.excolor.excolor.js');
-      if (j.length == 2) {
-        root_path = j[0]
+    if (!C.root_path) {
+      for (var i = 0; i < moved_slider.length; i++) {
+        j = '' + jQuery(moved_slider[i]).attr('src');
+        j = j.toLowerCase();
+        j = j.split('jquery.excolor.js');
+        if (j.length == 2) {
+          root_path = j[0]
+          console.log(root_path);
+        }
       }
+    } else {
+      root_path = C.root_path;
     }
+    
     var k = new Image();
     var l = new Image();
     var m = new Image();
@@ -111,9 +119,9 @@ jQuery.fn.excolor = function (C) {
       shadow = '',
       backlight = '';
     if (C.round_corners) {
-      u = '-khtml-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;';
-      rad3px = '-khtml-border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;';
-      radwrap = '-khtml-border-radius: 0 7px 7px 7px;-moz-border-radius: 0 7px 7px 7px;-webkit-border-radius: 0 7px 7px 7px;border-radius: 0 7px 7px 7px;'
+      u = '-khtml-border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;';
+      rad3px = '-khtml-border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;';
+      radwrap = '-khtml-border-radius: 0 2px 2px 2px;-moz-border-radius: 0 2px 2px 2px;-webkit-border-radius: 0 2px 2px 2px;border-radius: 0 2px 2px 2px;'
     }
     if (C.shadow) {
       shadow = 'box-shadow:0 ' + C.shadow_size + 'px ' + (C.shadow_size * 2) + 'px 0 ' + C.shadow_color + ';-webkit-box-shadow:0 ' + C.shadow_size + 'px ' + (C.shadow_size * 2) + 'px 0 ' + C.shadow_color + ';-moz-box-shadow:0 ' + C.shadow_size + 'px ' + (C.shadow_size * 2) + 'px 0 ' + C.shadow_color + ';'
@@ -192,32 +200,38 @@ jQuery.fn.excolor = function (C) {
         jQuery(isample).val('').css('background', 'url(' + root_path + 'transp.gif) repeat');
         jQuery(wrapper).find('input').val('')
       } else {
-        for (var i = 0; i < parsex.length; i++) {
-          if (parsex.charAt(i) != '#' && (parsex.charAt(i) + '') in y) {
-            if (inputhex.length < 6) {
-              inputhex += parsex.charAt(i) + ''
+        if (parsex.match(rgb_input)) {
+          rgb_output = true;
+          rgbstring = parsergb(parsex);
+          inputhex = rgb2hex(rgbstring[0], rgbstring[1], rgbstring[2]);
+        } else {
+          for (var i = 0; i < parsex.length; i++) {
+            if (parsex.charAt(i) != '#' && (parsex.charAt(i) + '') in y) {
+              if (inputhex.length < 6) {
+                inputhex += parsex.charAt(i) + ''
+              }
             }
           }
-        }
-        switch (inputhex.length) {
-        case 0:
-          inputhex = '000000' + inputhex;
-          break;
-        case 1:
-          inputhex = '00000' + inputhex;
-          break;
-        case 2:
-          inputhex = '0000' + inputhex;
-          break;
-        case 3:
-          inputhex = '000' + inputhex;
-          break;
-        case 4:
-          inputhex = '00' + inputhex;
-          break;
-        case 5:
-          inputhex = '0' + inputhex;
-          break
+          switch (inputhex.length) {
+          case 0:
+            inputhex = '000000' + inputhex;
+            break;
+          case 1:
+            inputhex = '00000' + inputhex;
+            break;
+          case 2:
+            inputhex = '0000' + inputhex;
+            break;
+          case 3:
+            inputhex = '000' + inputhex;
+            break;
+          case 4:
+            inputhex = '00' + inputhex;
+            break;
+          case 5:
+            inputhex = '0' + inputhex;
+            break
+          }
         }
         parsex = hex2rgb(inputhex);
         parsex = rgb2hsv(parsex['r'], parsex['g'], parsex['b']);
@@ -278,6 +292,7 @@ jQuery.fn.excolor = function (C) {
     function action_ok() {
       if (userok) {
         var a = '#' + rgb2hex(jQuery(inp_r).val() * 1, jQuery(inp_g).val() * 1, jQuery(inp_b).val() * 1);
+        var b = jQuery(inp_r).val() * 1 + ',' + jQuery(inp_g).val() * 1 + ',' + jQuery(inp_b).val() * 1;
         if (jQuery.trim(jQuery(inp_r).val()) == '' && jQuery.trim(jQuery(inp_g).val()) == '' && jQuery.trim(jQuery(inp_b).val()) == '') {
           jQuery(isample).css('background', 'url(' + root_path + 'transp.gif) repeat');
           jQuery(aitem).val('')
@@ -286,7 +301,12 @@ jQuery.fn.excolor = function (C) {
           if (C.show_color_on_border) {
             jQuery(aitem).css('border-color', a)
           }
-          jQuery(aitem).val(a)
+          console.log(rgb_output);
+          if(rgb_output) {
+            jQuery(aitem).val(b);
+          } else {
+            jQuery(aitem).val(a);
+          }
         }
         userok = false;
         C.callback_on_ok()
@@ -511,6 +531,11 @@ jQuery.fn.excolor = function (C) {
       }
       return f
     };
+    
+    function parsergb (string) {
+      array = string.split(',');
+      return array
+    }
 
     function rgb2hex(r, g, b) {
       var a = new Array();
@@ -544,7 +569,7 @@ jQuery.fn.excolor = function (C) {
       var b = -1 * C.hue_bar * 20;
       var c = '<div id="excolor_sample_wrapper" style="width:62px;height:30px;float:left;background:none;border:1px solid ' + C.border_color + ';margin:0;padding:0;' + u + '"><div id="excolor_sample" style="width:60px;height:28px;border:1px solid white;float:left;padding:0;margin:0;' + u + '"></div></div>';
       init_color();
-      jQuery('body').append('<div style="display:none;width:265px;height:162px;position:absolute;overflow:hidden;padding:0;margin:0;' + radwrap + shadow + '" id="excolor_colorpicker"><div id="excolor_colorpicker_wrapper" style="height:140px;width:244px;margin:0;padding:10px 9px 10px 10px;float:left;overflow:hidden;background-color:' + C.background_color + ';border:1px solid ' + C.border_color + ';' + backlight + radwrap + '"><div id="excolor_grad_wrap" style="width:140px;height:140px;float:left;background:none;padding:0;margin:0;border:none;"><div id="excolor_grad" style="width:132px;height:132px;border:4px solid ' + C.sb_border_color + ';padding:0;margin:0;' + u + '"><div style="width:130px;height:130px;float:left;background-image:url(' + root_path + 'bg.png);background-position:0 0;background-repeat:no-repeat;border:1px solid white;padding:0;margin:0;"></div></div></div><div id="excolor_hue_wrap" style="width:20px;height:130px;float:left;padding:15px 8px 0px 10px;margin:0;border:none;"><div id="excolor_hue" style="width:20px;height:130px;float:left;background:url(' + root_path + 'hue.png) ' + b + 'px 0 no-repeat;margin:0;padding:0;border:none;"></div></div><div id="excolor_data" style="float:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;width:66px;height:140px;margin:0;padding:0;border:none;">' + c + '<div class="excolor_dataitem" style="float:left;padding:6px 0 0 0;margin:0;border:none;"><b style="display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:' + C.label_color + ';line-height:13px;">R</b><input style="line-height:13px;padding:1px 0;margin:0;color:' + C.input_text_color + ';border:1px solid ' + C.border_color + ';background:' + C.input_background_color + ';width:49px;font-size:10px;text-align:center;' + rad3px + '" id="excolor_r" class="excolor_input excolor_rgb" type="text" size="3" maxlength="3" /></div><div class="excolor_dataitem" style="float:left;padding:3px 0 0 0;margin:0;border:none;"><b style="display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:' + C.label_color + ';line-height:13px;">G</b><input style="line-height:13px;padding:1px 0;margin:0;color:' + C.input_text_color + ';border:1px solid ' + C.border_color + ';background:' + C.input_background_color + ';width:49px;font-size:10px;text-align:center;' + rad3px + '" id="excolor_g" class="excolor_input excolor_rgb" type="text" size="3" maxlength="3" /></div><div class="excolor_dataitem" style="float:left;padding:3px 0 0 0;margin:0;border:none;"><b style="display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:' + C.label_color + ';line-height:13px;">B</b><input style="padding:1px 0;margin:0;color:' + C.input_text_color + ';border:1px solid ' + C.border_color + ';background:' + C.input_background_color + ';width:49px;font-size:10px;text-align:center;' + rad3px + '" id="excolor_b" class="excolor_input excolor_rgb" type="text" size="3" maxlength="3" /></div><div class="excolor_dataitem" style="float:left;padding:6px 0;margin:0;border:none;"><b style="display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:' + C.label_color + ';line-height:13px;">#</b><input style="padding:1px 0;margin:0;color:' + C.input_text_color + ';border:1px solid ' + C.border_color + ';background:' + C.input_background_color + ';width:49px;font-size:10px;text-align:center;' + rad3px + '" id="excolor_hex" class="excolor_input" type="text" size="6" maxlength="6" /></div><div style="width:66px;height:15px;padding:0;margin:0;border:none;float:left;"><div id="excolor_ok" style="margin:0;padding:0;width:47px;height:15px;float:left;cursor:pointer;background-image:url(' + root_path + 'ok.png);background-position: 0 0;background-repeat:no-repeat;"></div><div id="excolor_close" style="margin:0;padding:0;width:15px;height:15px;float:right;cursor:pointer;background-image:url(' + root_path + 'ok.png);background-position: -47px 0;background-repeat:no-repeat;"></div></div></div></div></div><div style="display:none;width:11px;height:11px;position:absolute;background: url(' + root_path + 'sel.gif) ' + (-1 * C.sb_slider * 11) + 'px 0 no-repeat;margin:0;padding:0;border:none;" id="excolor_picker"></div><div style="display:none;width:20px;height:11px;position:absolute;background: url(' + root_path + 'slider.gif) ' + (-1 * C.hue_slider * 20) + 'px 0 no-repeat;margin:0;padding:0;border:none;cursor:n-resize;" id="excolor_slider"></div><div id="excolor_switcher" style="border:1px solid ' + C.border_color + ';display:none;padding:0;margin:0;font-size:1px;line-height:1px;width:20px;height:12px;background:url(' + root_path + 'transp0.gif) 0 0 no-repeat;position:absolute;cursor:pointer;' + rad3px + '"></div>');
+      jQuery('body').append('<div id="excolor_colorpicker"><div id="excolor_colorpicker_wrapper"><div id="excolor_grad_wrap" style="width:140px;height:140px;float:left;background:none;padding:0;margin:0;border:none;"><div id="excolor_grad" style="width:132px;height:132px;border:4px solid ' + C.sb_border_color + ';padding:0;margin:0;' + u + '"><div style="width:130px;height:130px;float:left;background-image:url(' + root_path + 'bg.png);background-position:0 0;background-repeat:no-repeat;border:1px solid white;padding:0;margin:0;"></div></div></div><div id="excolor_hue_wrap" style="width:20px;height:130px;float:left;padding:15px 8px 0px 10px;margin:0;border:none;"><div id="excolor_hue" style="width:20px;height:130px;float:left;background:url(' + root_path + 'hue.png) ' + b + 'px 0 no-repeat;margin:0;padding:0;border:none;"></div></div><div id="excolor_data" style="float:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;width:66px;height:140px;margin:0;padding:0;border:none;">' + c + '<div class="excolor_dataitem" style="float:left;padding:6px 0 0 0;margin:0;border:none;"><b style="display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:' + C.label_color + ';line-height:13px;">R</b><input style="line-height:13px;padding:1px 0;margin:0;color:' + C.input_text_color + ';border:1px solid ' + C.border_color + ';background:' + C.input_background_color + ';width:49px;font-size:10px;text-align:center;' + rad3px + '" id="excolor_r" class="excolor_input excolor_rgb" type="text" size="3" maxlength="3" /></div><div class="excolor_dataitem" style="float:left;padding:3px 0 0 0;margin:0;border:none;"><b style="display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:' + C.label_color + ';line-height:13px;">G</b><input style="line-height:13px;padding:1px 0;margin:0;color:' + C.input_text_color + ';border:1px solid ' + C.border_color + ';background:' + C.input_background_color + ';width:49px;font-size:10px;text-align:center;' + rad3px + '" id="excolor_g" class="excolor_input excolor_rgb" type="text" size="3" maxlength="3" /></div><div class="excolor_dataitem" style="float:left;padding:3px 0 0 0;margin:0;border:none;"><b style="display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:' + C.label_color + ';line-height:13px;">B</b><input style="padding:1px 0;margin:0;color:' + C.input_text_color + ';border:1px solid ' + C.border_color + ';background:' + C.input_background_color + ';width:49px;font-size:10px;text-align:center;' + rad3px + '" id="excolor_b" class="excolor_input excolor_rgb" type="text" size="3" maxlength="3" /></div><div class="excolor_dataitem" style="float:left;padding:6px 0;margin:0;border:none;"><b style="display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:' + C.label_color + ';line-height:13px;">#</b><input style="padding:1px 0;margin:0;color:' + C.input_text_color + ';border:1px solid ' + C.border_color + ';background:' + C.input_background_color + ';width:49px;font-size:10px;text-align:center;' + rad3px + '" id="excolor_hex" class="excolor_input" type="text" size="6" maxlength="6" /></div><div style="width:66px;height:15px;padding:0;margin:0;border:none;float:left;"><div id="excolor_ok">OK</div><div id="excolor_close">X</div></div></div></div></div><div style="display:none;width:11px;height:11px;position:absolute;background: url(' + root_path + 'sel.gif) ' + (-1 * C.sb_slider * 11) + 'px 0 no-repeat;margin:0;padding:0;border:none;" id="excolor_picker"></div><div style="display:none;width:20px;height:11px;position:absolute;background: url(' + root_path + 'slider.gif) ' + (-1 * C.hue_slider * 20) + 'px 0 no-repeat;margin:0;padding:0;border:none;cursor:n-resize;" id="excolor_slider"></div><div id="excolor_switcher" style="border:1px solid ' + C.border_color + ';display:none;padding:0;margin:0;font-size:1px;line-height:1px;width:20px;height:12px;background:url(' + root_path + 'transp0.gif) 0 0 no-repeat;position:absolute;cursor:pointer;' + rad3px + '"></div>');
       aitem_pos = jQuery(aitem).offset();
       wrapper = jQuery('body > div#excolor_colorpicker').css('left', aitem_pos.left + 'px').css('top', (aitem_pos.top + jQuery(aitem).outerHeight()) + 'px').mouseenter(function () {
         clearTimeout(click_to);

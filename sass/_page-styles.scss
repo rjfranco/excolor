@@ -8,8 +8,9 @@ div#container {
   color: #333;
   text-shadow: #fff 1px 1px 0;
   width: 50em;
-  margin: 2em auto;
+  margin: 2em auto 0;
   padding: 1.5em;
+  overflow: hidden;
   @include box-shadow(1em);
   @include border-radius(3px);
   h1 {
