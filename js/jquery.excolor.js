@@ -24,6 +24,7 @@ jQuery.fn.excolor = function (C) {
     label_color: 'black',
     effect: 'none',
     root_path: false,
+    rgb_output: false,
     callback_on_ok: function () {
       var a = ''
     }
@@ -63,7 +64,7 @@ jQuery.fn.excolor = function (C) {
       parsex = '',
       inputhex = '',
       rgb_input = /\d+\,\d+\,\d+/i,
-      rgb_output = false,
+      rgb_output = C.rgb_output,
       looper = 0,
       switcher = 0;
     moved_slider = jQuery('script');
