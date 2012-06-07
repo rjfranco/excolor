@@ -5,6 +5,9 @@
 
 Work has only just started, input is welcome :-)
 
+### As of jQuery 1.7, this seems to be very broken
+I haven't tested it in an isolated environment to test though, so for all I know, I have something else that is conflicting. Currently, I'm re-writing this library to use much nicer / easier to read methods. I'll try to get that out ASAP, but I have a couple of contracts keeping me super busy.
+
 To get started using it, make sure you've got jquery, the excolor plugin, and the excolor css file linked. If your images are not in the same place as the javascript ( not sure why anyone would put those in the same place ...) just pass root\_path to the file like so:
 
 ~~~
