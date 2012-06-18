@@ -4,62 +4,61 @@
 ###
 
 jQuery.fn.excolor = (C) ->
+
   C = jQuery.extend(
     hue_bar: 0
     hue_slider: 0
     sb_slider: 0
+    resource_path: null
     color_box: true
     demo_mode: false
     show_color_on_border: false
     border_color: "black"
     sb_border_color: "black"
-    anim_speed: "slow"
+    anim_speed: "fast"
     round_corners: true
     shadow: true
     shadow_size: 4
     shadow_color: "#8a8a8a"
     background_color: "silver"
-    backlight: true
+    backlight: false
     input_text_color: "black"
     input_background_color: "white"
     label_color: "black"
     effect: "none"
-    root_path: false
-    rgb_output: false
     callback_on_ok: ->
       a = ""
   , C)
+
   @each ->
+
     init_color = ->
       parsex = jQuery.trim(jQuery(aitem).val() + "")
       inputhex = ""
-      if parsex is ""
+      if parsex == ""
         jQuery(isample).val("").css "background", "url(" + root_path + "transp.gif) repeat"
         jQuery(wrapper).find("input").val ""
       else
-        if parsex.match(rgb_input)
-          rgb_output = true
-          rgbstring = parsergb(parsex)
-          inputhex = rgb2hex(rgbstring[0], rgbstring[1], rgbstring[2])
-        else
-          i = 0
+        i = 0
 
-          while i < parsex.length
-            inputhex += parsex.charAt(i) + ""  if inputhex.length < 6  if parsex.charAt(i) isnt "#" and (parsex.charAt(i) + "") of y
-            i++
-          switch inputhex.length
-            when 0
-              inputhex = "000000" + inputhex
-            when 1
-              inputhex = "00000" + inputhex
-            when 2
-              inputhex = "0000" + inputhex
-            when 3
-              inputhex = "000" + inputhex
-            when 4
-              inputhex = "00" + inputhex
-            when 5
-              inputhex = "0" + inputhex
+        while i < parsex.length
+          inputhex += parsex.charAt(i) + ""  if inputhex.length < 6  if parsex.charAt(i) != "#" and (parsex.charAt(i) + "") of y
+          i++
+
+        switch inputhex.length
+          when 0
+            inputhex = "000000" + inputhex
+          when 1
+            inputhex = "00000" + inputhex
+          when 2
+            inputhex = "0000" + inputhex
+          when 3
+            inputhex = "000" + inputhex
+          when 4
+            inputhex = "00" + inputhex
+          when 5
+            inputhex = "0" + inputhex
+
         parsex = hex2rgb(inputhex)
         parsex = rgb2hsv(parsex["r"], parsex["g"], parsex["b"])
         hue = 120 - Math.round(parsex["h"] * 1 / 3)
@@ -77,7 +76,7 @@ jQuery.fn.excolor = (C) ->
       click_flag = true
       switch C.effect
         when "zoom"
-          jQuery(wrapper).animate
+          jQuery(wrapper).animate 
             width: "0px"
             height: "0px"
           , C.anim_speed, ->
@@ -98,19 +97,14 @@ jQuery.fn.excolor = (C) ->
     action_ok = ->
       if userok
         a = "#" + rgb2hex(jQuery(inp_r).val() * 1, jQuery(inp_g).val() * 1, jQuery(inp_b).val() * 1)
-        b = jQuery(inp_r).val() * 1 + "," + jQuery(inp_g).val() * 1 + "," + jQuery(inp_b).val() * 1
-        if jQuery.trim(jQuery(inp_r).val()) is "" and jQuery.trim(jQuery(inp_g).val()) is "" and jQuery.trim(jQuery(inp_b).val()) is ""
+        if jQuery.trim(jQuery(inp_r).val()) == "" and jQuery.trim(jQuery(inp_g).val()) == "" and jQuery.trim(jQuery(inp_b).val()) == ""
           jQuery(isample).css "background", "url(" + root_path + "transp.gif) repeat"
           jQuery(aitem).val ""
         else
           jQuery(isample).css "background", a
           jQuery(aitem).css "border-color", a  if C.show_color_on_border
-          if rgb_output
-            jQuery(aitem).val b
-          else
-            jQuery(aitem).val a
+          jQuery(aitem).val a
         userok = false
-        jQuery(aitem).trigger "change"
         C.callback_on_ok()
     draw_rgb = ->
       a = rgb2hsv(jQuery(inp_r).val() * 1, jQuery(inp_g).val() * 1, jQuery(inp_b).val() * 1)
@@ -140,12 +134,12 @@ jQuery.fn.excolor = (C) ->
           hexistr = "0" + hexistr
       if hexistr.length > 0
         i = 0
-
+        
         while i < hexistr.length
-          a = false  unless (hexistr.charAt(i) + "") of y
+          a = false  unless ((hexistr.charAt(i) + "") of y)
           i++
       if a
-        if hexistr is ""
+        if hexistr == ""
           hue = 119
           saturation = 0
           brightness = 0
@@ -163,7 +157,7 @@ jQuery.fn.excolor = (C) ->
         jQuery(slider).css("left", pos_huebox.left + "px").css "top", (pos_huebox.top + hue) + "px"
         init_positions()
         init_colors()
-        if hexistr is ""
+        if hexistr == ""
           jQuery(colsample).css("background-image", "url(" + root_path + "transp.gif)").css "background-repeat", "repeat"
           jQuery(isample).val("").css "background", "url(" + root_path + "transp.gif) repeat"
           jQuery(switcher).css "background", "url(" + root_path + "transp0.gif) -20px 0 no-repeat"
@@ -179,14 +173,8 @@ jQuery.fn.excolor = (C) ->
       s = b / 100
       v = c / 100
       e = new Array()
-      f = undefined
-      var_i = undefined
-      var_1 = undefined
-      var_2 = undefined
-      var_3 = undefined
-      var_r = undefined
-      var_g = undefined
-      if s is 0
+      
+      if s == 0
         e["r"] = v * 255
         e["g"] = v * 255
         e["b"] = v * 255
@@ -196,23 +184,23 @@ jQuery.fn.excolor = (C) ->
         var_1 = v * (1 - s)
         var_2 = v * (1 - s * (f - var_i))
         var_3 = v * (1 - s * (1 - (f - var_i)))
-        if var_i is 0
+        if var_i == 0
           var_r = v
           var_g = var_3
           var_b = var_1
-        else if var_i is 1
+        else if var_i == 1
           var_r = var_2
           var_g = v
           var_b = var_1
-        else if var_i is 2
+        else if var_i == 2
           var_r = var_1
           var_g = v
           var_b = var_3
-        else if var_i is 3
+        else if var_i == 3
           var_r = var_1
           var_g = var_2
           var_b = v
-        else if var_i is 4
+        else if var_i == 4
           var_r = var_3
           var_g = var_1
           var_b = v
@@ -223,9 +211,9 @@ jQuery.fn.excolor = (C) ->
         e["r"] = Math.round(var_r * 255)
         e["g"] = Math.round(var_g * 255)
         e["b"] = Math.round(var_b * 255)
-      if d is "hex"
+      if d == "hex"
         rgb2hex e["r"], e["g"], e["b"]
-      else if d is "rgb"
+      else if d == "rgb"
         e
       else
         e
@@ -234,7 +222,6 @@ jQuery.fn.excolor = (C) ->
       a = h
       a.toUpperCase()
       h = a
-      i = undefined
       x = "0123456789ABCDEF"
       c = ""
       b = new Array()
@@ -264,18 +251,18 @@ jQuery.fn.excolor = (C) ->
       maxrgb = Math.max(Math.max(a, c), d)
       delta = (maxrgb - e)
       b = maxrgb
-      unless maxrgb is 0.0
+      unless maxrgb == 0.0
         s = 255.0 * delta / maxrgb
       else
         s = 0.0
-      unless s is 0.0
-        if a is maxrgb
+      unless s == 0.0
+        if a == maxrgb
           h = (c - d) / delta
         else
-          if c is maxrgb
+          if c == maxrgb
             h = 2.0 + (d - a) / delta
           else
-            h = 4.0 + (a - c) / delta  if d is maxrgb
+            h = 4.0 + (a - c) / delta  if d == maxrgb
       else
         h = -1.0
       h = h * 60
@@ -287,9 +274,6 @@ jQuery.fn.excolor = (C) ->
       f["s"] = 100  if f["s"] > 100
       f["v"] = 100  if f["v"] > 100
       f
-    parsergb = (string) ->
-      array = string.split(",")
-      array
     rgb2hex = (r, g, b) ->
       a = new Array()
       a[0] = r
@@ -298,7 +282,7 @@ jQuery.fn.excolor = (C) ->
       c = [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" ]
       d = ""
       i = 0
-
+      
       while i < a.length
         dec = parseInt(a[i])
         d += c[parseInt(dec / 16)] + c[dec % 16]
@@ -313,9 +297,9 @@ jQuery.fn.excolor = (C) ->
       jQuery(switcher).css "background", "url(" + root_path + "transp0.gif) 0 0 no-repeat"
     run_excolor_colorpicker = ->
       b = -1 * C.hue_bar * 20
-      c = "<div id=\"excolor_sample_wrapper\"><div id=\"excolor_sample\"></div></div>"
+      c = "<div id=\"excolor_sample_wrapper\" style=\"width:62px;height:30px;float:left;background:none;border:1px solid " + C.border_color + ";margin:0;padding:0;" + u + "\"><div id=\"excolor_sample\" style=\"width:60px;height:28px;border:1px solid white;float:left;padding:0;margin:0;" + u + "\"></div></div>"
       init_color()
-      jQuery("body").append "<div id=\"excolor_colorpicker\"><div id=\"excolor_colorpicker_wrapper\"><div id=\"excolor_grad_wrap\"><div id=\"excolor_grad\"><div style=\"width:130px;height:130px;float:left;background-image:url(" + root_path + "bg.png);background-position:0 0;background-repeat:no-repeat;border:1px solid white;padding:0;margin:0;\"></div></div></div><div id=\"excolor_hue_wrap\" style=\"width:20px;height:130px;float:left;padding:15px 8px 0px 10px;margin:0;border:none;\"><div id=\"excolor_hue\" style=\"width:20px;height:130px;float:left;background:url(" + root_path + "hue.png) " + b + "px 0 no-repeat;margin:0;padding:0;border:none;\"></div></div><div id=\"excolor_data\" style=\"float:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;width:66px;height:140px;margin:0;padding:0;border:none;\">" + c + "<div class=\"excolor_dataitem first\"><b class=\"label\">R</b><input id=\"excolor_r\" class=\"excolor_input excolor_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"excolor_dataitem\" style=\"float:left;padding:3px 0 0 0;margin:0;border:none;\"><b class=\"label\">G</b><input id=\"excolor_g\" class=\"excolor_input excolor_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"excolor_dataitem\"><b class=\"label\">B</b><input id=\"excolor_b\" class=\"excolor_input excolor_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"excolor_dataitem last\"><b class=\"label\">#</b><input id=\"excolor_hex\" class=\"excolor_input\" type=\"text\" size=\"6\" maxlength=\"6\" /></div><div style=\"width:66px;height:15px;padding:0;margin:0;border:none;float:left;\"><div id=\"excolor_ok\">OK</div><div id=\"excolor_close\">X</div></div></div></div></div><div id=\"excolor_picker\"></div><div id=\"excolor_slider\"></div><div id=\"excolor_switcher\"></div>"
+      jQuery("body").append "<div style=\"display:none;width:265px;height:162px;position:absolute;overflow:hidden;padding:0;margin:0;" + radwrap + shadow + "\" id=\"excolor_colorpicker\"><div id=\"excolor_colorpicker_wrapper\" style=\"height:140px;width:244px;margin:0;padding:10px 9px 10px 10px;float:left;overflow:hidden;background-color:" + C.background_color + ";border:1px solid " + C.border_color + ";" + backlight + radwrap + "\"><div id=\"excolor_grad_wrap\" style=\"width:140px;height:140px;float:left;background:none;padding:0;margin:0;border:none;\"><div id=\"excolor_grad\" style=\"width:132px;height:132px;border:4px solid " + C.sb_border_color + ";padding:0;margin:0;" + u + "\"><div style=\"width:130px;height:130px;float:left;background-image:url(" + root_path + "bg.png);background-position:0 0;background-repeat:no-repeat;border:1px solid white;padding:0;margin:0;\"></div></div></div><div id=\"excolor_hue_wrap\" style=\"width:20px;height:130px;float:left;padding:15px 8px 0px 10px;margin:0;border:none;\"><div id=\"excolor_hue\" style=\"width:20px;height:130px;float:left;background:url(" + root_path + "hue.png) " + b + "px 0 no-repeat;margin:0;padding:0;border:none;\"></div></div><div id=\"excolor_data\" style=\"float:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;width:66px;height:140px;margin:0;padding:0;border:none;\">" + c + "<div class=\"excolor_dataitem\" style=\"float:left;padding:6px 0 0 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">R</b><input style=\"line-height:13px;padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"excolor_r\" class=\"excolor_input excolor_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"excolor_dataitem\" style=\"float:left;padding:3px 0 0 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">G</b><input style=\"line-height:13px;padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"excolor_g\" class=\"excolor_input excolor_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"excolor_dataitem\" style=\"float:left;padding:3px 0 0 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">B</b><input style=\"padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"excolor_b\" class=\"excolor_input excolor_rgb\" type=\"text\" size=\"3\" maxlength=\"3\" /></div><div class=\"excolor_dataitem\" style=\"float:left;padding:6px 0;margin:0;border:none;\"><b style=\"display:inline-block;width:13px;text-align:left;font-size:10px;font-family: Verdana, Arial, Helvetica, Sans-serif;font-weight:bold;color:" + C.label_color + ";line-height:13px;\">#</b><input style=\"padding:1px 0;margin:0;color:" + C.input_text_color + ";border:1px solid " + C.border_color + ";background:" + C.input_background_color + ";width:49px;font-size:10px;text-align:center;" + rad3px + "\" id=\"excolor_hex\" class=\"excolor_input\" type=\"text\" size=\"6\" maxlength=\"6\" /></div><div style=\"width:66px;height:15px;padding:0;margin:0;border:none;float:left;\"><div id=\"excolor_ok\" style=\"margin:0;padding:0;width:47px;height:15px;float:left;cursor:pointer;background-image:url(" + root_path + "ok.png);background-position: 0 0;background-repeat:no-repeat;\"></div><div id=\"excolor_close\" style=\"margin:0;padding:0;width:15px;height:15px;float:right;cursor:pointer;background-image:url(" + root_path + "ok.png);background-position: -47px 0;background-repeat:no-repeat;\"></div></div></div></div></div><div style=\"display:none;width:11px;height:11px;position:absolute;background: url(" + root_path + "sel.gif) " + (-1 * C.sb_slider * 11) + "px 0 no-repeat;margin:0;padding:0;border:none;\" id=\"excolor_picker\"></div><div style=\"display:none;width:20px;height:11px;position:absolute;background: url(" + root_path + "slider.gif) " + (-1 * C.hue_slider * 20) + "px 0 no-repeat;margin:0;padding:0;border:none;cursor:n-resize;\" id=\"excolor_slider\"></div><div id=\"excolor_switcher\" style=\"border:1px solid " + C.border_color + ";display:none;padding:0;margin:0;font-size:1px;line-height:1px;width:20px;height:12px;background:url(" + root_path + "transp0.gif) 0 0 no-repeat;position:absolute;cursor:pointer;" + rad3px + "\"></div>"
       aitem_pos = jQuery(aitem).offset()
       wrapper = jQuery("body > div#excolor_colorpicker").css("left", aitem_pos.left + "px").css("top", (aitem_pos.top + jQuery(aitem).outerHeight()) + "px").mouseenter(->
         clearTimeout click_to
@@ -334,7 +318,7 @@ jQuery.fn.excolor = (C) ->
       sb_sel = jQuery("body > div#excolor_picker")
       switch C.effect
         when "zoom"
-          jQuery(wrapper).css("width", "0px").css("height", "0px").show().animate
+          jQuery(wrapper).css("width", "0px").css("height", "0px").show().animate 
             width: "265px"
             height: "162px"
           , C.anim_speed, ->
@@ -365,7 +349,7 @@ jQuery.fn.excolor = (C) ->
       pos_sbbox = jQuery(sbbox).offset()
       pos_huebox = jQuery(huebox).offset()
       jQuery(switcher).click(->
-        if jQuery.trim(jQuery(inp_r).val()) is "" and jQuery.trim(jQuery(inp_g).val()) is "" and jQuery.trim(jQuery(inp_b).val()) is ""
+        if jQuery.trim(jQuery(inp_r).val()) == "" and jQuery.trim(jQuery(inp_g).val()) == "" and jQuery.trim(jQuery(inp_b).val()) == ""
           jQuery(colsample).css "background-image", "none"
           jQuery(this).css "background", "url(" + root_path + "transp0.gif) 0 0 no-repeat"
           update_inputs()
@@ -383,7 +367,7 @@ jQuery.fn.excolor = (C) ->
         click_to = setTimeout(->
           click_flag = false
         , 50)
-
+      
       jQuery(slider).mouseenter(->
         clearTimeout click_to
         click_to = setTimeout(->
@@ -394,7 +378,7 @@ jQuery.fn.excolor = (C) ->
         click_to = setTimeout(->
           click_flag = false
         , 50)
-
+      
       jQuery(sb_sel).mouseenter(->
         clearTimeout click_to
         click_to = setTimeout(->
@@ -407,7 +391,7 @@ jQuery.fn.excolor = (C) ->
         , 50)
       ).dblclick (e) ->
         jQuery(ok_but).click()
-
+      
       jQuery(sb_sel).mousedown((e) ->
         pos_sel = jQuery(this).offset()
         correct_x = e.pageX - pos_sel.left
@@ -416,7 +400,7 @@ jQuery.fn.excolor = (C) ->
         jQuery(switcher).css "background", "url(" + root_path + "transp0.gif) 0 0 no-repeat"
         e.preventDefault()
       ).click (e) ->
-
+      
       jQuery(slider).mousedown (e) ->
         pos_slider = jQuery(this).offset()
         correct_x = e.pageX - pos_slider.left
@@ -424,7 +408,7 @@ jQuery.fn.excolor = (C) ->
         moved_slider = this
         jQuery(switcher).css "background", "url(" + root_path + "transp0.gif) 0 0 no-repeat"
         e.preventDefault()
-
+      
       jQuery(huebox).mousedown (e) ->
         if e.pageY >= (pos_huebox.top + 5) and e.pageY <= ((pos_huebox.top + jQuery(huebox).height()) - 6)
           hue = e.pageY - pos_huebox.top - 5
@@ -439,7 +423,7 @@ jQuery.fn.excolor = (C) ->
           correct_y = e.pageY - pos_slider.top
           moved_slider = slider
           e.preventDefault()
-
+      
       jQuery(sbbox).mousedown (e) ->
         saturation = Math.round((e.pageX - pos_sbbox.left - 1) / 1.3)
         saturation = 100  if saturation > 100
@@ -456,15 +440,15 @@ jQuery.fn.excolor = (C) ->
         correct_x = e.pageX - pos_sel.left
         correct_y = e.pageY - pos_sel.top
         e.preventDefault()
-
+      
       jQuery(wrapper).find("input.excolor_input").keypress((a) ->
         if jQuery(this).hasClass("excolor_rgb")
-          a.preventDefault()  if ((String.fromCharCode(a.which) * 1) of w) and (a.which of z)
+          a.preventDefault()  if not ((String.fromCharCode(a.which) * 1) of w) and not (a.which of z)
         else
-          a.preventDefault()  if (String.fromCharCode(a.which) not of y) and (a.which not of z)
+          a.preventDefault()  if not (String.fromCharCode(a.which) of y) and not (a.which of z)
       ).change(->
         if jQuery(this).hasClass("excolor_rgb")
-          jQuery(this).val "0"  if jQuery(this).val() is ""
+          jQuery(this).val "0"  if jQuery(this).val() == ""
           jQuery(this).val "0"  if isNaN(jQuery(this).val() * 1)
           jQuery(this).val "255"  if jQuery(this).val() * 1 > 255
           jQuery(this).val "0"  if jQuery(this).val() * 1 < 0
@@ -473,22 +457,22 @@ jQuery.fn.excolor = (C) ->
           hex_valid_and_draw()
       ).keyup ->
         if jQuery(this).hasClass("excolor_rgb")
-          jQuery(this).val "0"  if jQuery(this).val() is ""
+          jQuery(this).val "0"  if jQuery(this).val() == ""
           jQuery(this).val "0"  if isNaN(jQuery(this).val() * 1)
           jQuery(this).val "255"  if jQuery(this).val() * 1 > 255
           jQuery(this).val "0"  if jQuery(this).val() * 1 < 0
           draw_rgb()
         else
           hex_valid_and_draw()
-
+      
       inp_hex[0].onpaste = inp_hex[0].oninput = (e) ->
         clearTimeout hexto
         hexto = setTimeout(->
           hex_valid_and_draw()
         , 100)
-
+      
       inp_r[0].onpaste = inp_r[0].oninput = inp_g[0].onpaste = inp_g[0].oninput = inp_b[0].onpaste = inp_b[0].oninput = (e) ->
-        jQuery(this).val "0"  if jQuery(this).val() is ""
+        jQuery(this).val "0"  if jQuery(this).val() == ""
         jQuery(this).val "0"  if isNaN(jQuery(this).val() * 1)
         jQuery(this).val "255"  if jQuery(this).val() * 1 > 255
         jQuery(this).val "0"  if jQuery(this).val() * 1 < 0
@@ -496,7 +480,7 @@ jQuery.fn.excolor = (C) ->
         hexto = setTimeout(->
           draw_rgb()
         , 100)
-
+      
       jQuery(ok_but).click(->
         userok = true
         action_exit()
@@ -504,19 +488,19 @@ jQuery.fn.excolor = (C) ->
         jQuery(this).css "background-position", "0 -15px"
       ).mouseleave ->
         jQuery(this).css "background-position", "0 0"
-
+      
       jQuery(close_but).click(->
         action_exit()
       ).mouseenter(->
         jQuery(this).css "background-position", "-47px -15px"
       ).mouseleave ->
         jQuery(this).css "background-position", "-47px 0"
-
+      
       init_positions()
       jQuery(inp_hex).val inputhex
       hex_valid_and_draw()
       opened = true
-      if inputhex is ""
+      if inputhex == ""
         jQuery(switcher).css "background", "url(" + root_path + "transp0.gif) -20px 0 no-repeat"
       else
         jQuery(switcher).css "background", "url(" + root_path + "transp0.gif) 0 0 no-repeat"
@@ -553,22 +537,18 @@ jQuery.fn.excolor = (C) ->
     userok = false
     parsex = ""
     inputhex = ""
-    rgb_input = /\d+\,\d+\,\d+/i
-    rgb_output = C.rgb_output
+    root_path = ""
     looper = 0
     switcher = 0
     moved_slider = jQuery("script")
-    unless C.root_path
-      i = 0
-
-      while i < moved_slider.length
-        j = "" + jQuery(moved_slider[i]).attr("src")
-        j = j.toLowerCase()
-        j = j.split("jquery.excolor.js")
-        root_path = j[0]  if j.length is 2
-        i++
-    else
-      root_path = C.root_path
+    i = 0
+    
+    while i < moved_slider.length
+      j = "" + jQuery(moved_slider[i]).attr("src")
+      j = j.toLowerCase()
+      j = j.split("jquery.excolor.js")
+      root_path = j[0]  if j.length == 2
+      i++
     k = new Image()
     l = new Image()
     m = new Image()
@@ -597,16 +577,16 @@ jQuery.fn.excolor = (C) ->
       click_to = setTimeout(->
         click_flag = false
       , 100)
-
-    jQuery(aitem).wrap "<span style=\"margin:0;padding:0\"></span>"  if C.color_box
+    
+    jQuery(aitem).wrap "<span style=\"margin:0;padding:0 " + jQuery(aitem).outerHeight() + "px 0 0;display:inline-block;border:none;background:none;line-height:auto;\"></span>"  if C.color_box
     u = ""
     rad3px = ""
     radwrap = ""
     shadow = ""
     backlight = ""
     if C.round_corners
-      u = "-khtml-border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;"
-      rad3px = "-khtml-border-radius:2px;-moz-border-radius:2px;-webkit-border-radius:2px;border-radius:2px;"
+      u = "-khtml-border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;"
+      rad3px = "-khtml-border-radius:3px;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;"
       radwrap = "-khtml-border-radius: 0 2px 2px 2px;-moz-border-radius: 0 2px 2px 2px;-webkit-border-radius: 0 2px 2px 2px;border-radius: 0 2px 2px 2px;"
     shadow = "box-shadow:0 " + C.shadow_size + "px " + (C.shadow_size * 2) + "px 0 " + C.shadow_color + ";-webkit-box-shadow:0 " + C.shadow_size + "px " + (C.shadow_size * 2) + "px 0 " + C.shadow_color + ";-moz-box-shadow:0 " + C.shadow_size + "px " + (C.shadow_size * 2) + "px 0 " + C.shadow_color + ";"  if C.shadow
     backlight = "background-position:0 0;background-repeat:no-repeat;background-image:url(" + root_path + "shbg.png);"  if C.backlight
@@ -647,10 +627,11 @@ jQuery.fn.excolor = (C) ->
     A = A.split(".")
     A = "mc" + A[1]
     B = jQuery(aitem).parent().offset()
-    jQuery(aitem).parent().append "<input class=\"excolor_clrbox\" readonly=\"readonly\" id=\"" + A + "\" type=\"text\" />"
+    jQuery(aitem).parent().append "&nbsp;<input class=\"excolor_clrbox\" readonly=\"readonly\" id=\"" + A + "\" type=\"text\" style=\"display:none;cursor:pointer;width:" + (jQuery(aitem).outerHeight() - 4) + "px;height:" + (jQuery(aitem).outerHeight() - 4) + "px;background:none;" + rad3px + "border:1px solid " + C.border_color + ";\" />"
     jQuery(aitem).clone().show().addClass("mds" + A).css("position", "absolute").css("visibility", "hidden").appendTo "body"
     setTimeout (->
       a = jQuery("body > .mds" + A)
+      jQuery(aitem).parent().find("#" + A).css "width", (jQuery(a).outerHeight() - 2) + "px"
       jQuery(a).remove()
     ), 300
     isample = jQuery(aitem).parent().find("#" + A).mouseenter(->
@@ -678,7 +659,7 @@ jQuery.fn.excolor = (C) ->
       j = "mel"
       moved_slider = "mel"
     ).mousemove((e) ->
-      unless j is "mel"
+      unless j == "mel"
         e.preventDefault()
         a = 0
         tty = 0
@@ -691,11 +672,11 @@ jQuery.fn.excolor = (C) ->
         jQuery(j).css("left", a + "px").css "top", tty + "px"
         brightness = -1 * (Math.round((tty - pos_sbbox.top + 5) / 1.3) - 100) + 1
         saturation = Math.round((a - pos_sbbox.left + 5) / 1.3)
-        brightness = 0  if brightness is 1
-        saturation = 0  if saturation is 1
+        brightness = 0  if brightness == 1
+        saturation = 0  if saturation == 1
         jQuery(colsample).css("background-color", "#" + hsb2rgb_hex(-1 * (hue - 119) * 3, saturation, brightness, "hex")).css "background-image", "none"
         update_inputs()
-      unless moved_slider is "mel"
+      unless moved_slider == "mel"
         e.preventDefault()
         hue = e.pageY - pos_huebox.top - correct_y
         hue = 0  if hue < 0
@@ -704,15 +685,15 @@ jQuery.fn.excolor = (C) ->
         init_colors()
         update_inputs()
     ).keydown((a) ->
-      if a.keyCode is "27"
+      if a.keyCode == "27"
         a.preventDefault()
         action_exit()
-      if a.keyCode is "13"
+      if a.keyCode == "13"
         a.preventDefault()
         jQuery(ok_but).click()
     ).click ->
       action_exit()  unless click_flag
-
+    
     jQuery(aitem).click(->
       unless opened
         jQuery("body > div#excolor_slider, body > div#excolor_picker, body > div#excolor_colorpicker").stop().remove()
@@ -726,8 +707,8 @@ jQuery.fn.excolor = (C) ->
         init_positions()
         jQuery(inp_hex).val inputhex
         hex_valid_and_draw()
-
+    
     jQuery(isample).click ->
       jQuery(aitem).click()
-
+    
     jQuery(isample).click()  if C.demo_mode
